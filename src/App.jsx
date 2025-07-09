@@ -3,7 +3,7 @@ import { Environment } from "@react-three/drei"
 
 import "./index.css"
 
-import Shader from "./BlobShader.jsx"
+import Shader from "./Raymarching.jsx"
 
 export default function App() {
   return (

@@ -7,7 +7,7 @@ import {
 } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
 import { useRef, useMemo, useEffect, useCallback, useState } from "react"
-import { useControls } from "leva"
+import { useControls, Leva } from "leva"
 
 import vertexShader from "./shaders/vertexShader.js"
 import fragmentShader from "./shaders/fragmentShader.js"
@@ -42,17 +42,8 @@ export default function Shader() {
 
   const [worldToObjectMatrix, setWorldToObjectMatrix] = useState(new Matrix4())
 
-  const {
-    reflection,
-    speed,
-    IOR,
-    count,
-    size,
-    dispersion,
-    refract,
-    chromaticAbberation,
-  } = useControls({
-    reflection: {
+  const { value, speed } = useControls({
+    value: {
       value: 1.5,
       min: 0.01,
       max: 6.0,
@@ -61,43 +52,7 @@ export default function Shader() {
     speed: {
       value: 0.5,
       min: 0.01,
-      max: 3.0,
-      step: 0.01,
-    },
-    IOR: {
-      value: 0.84,
-      min: 0.01,
-      max: 2.0,
-      step: 0.01,
-    },
-    count: {
-      value: 3,
-      min: 1,
-      max: 20,
-      step: 1,
-    },
-    size: {
-      value: 1.0,
-      min: 0.1,
-      max: 2.5,
-      step: 0.01,
-    },
-    dispersion: {
-      value: 0.03,
-      min: 0.0,
-      max: 0.1,
-      step: 0.001,
-    },
-    refract: {
-      value: 0.15,
-      min: 0.0,
-      max: 2.0,
-      step: 0.1,
-    },
-    chromaticAbberation: {
-      value: 0.5,
-      min: 0.0,
-      max: 5.0,
+      max: 1.0,
       step: 0.1,
     },
   })
@@ -156,15 +111,7 @@ export default function Shader() {
     )
 
     meshRef.current.material.uniforms.uTime.value = time * speed
-    meshRef.current.material.uniforms.uReflection.value = reflection
-    meshRef.current.material.uniforms.uSpeed.value = speed
-    meshRef.current.material.uniforms.uIOR.value = IOR
-    meshRef.current.material.uniforms.uCount.value = count
-    meshRef.current.material.uniforms.uSize.value = size
-    meshRef.current.material.uniforms.uDispersion.value = dispersion
-    meshRef.current.material.uniforms.uRefractPower.value = refract
-    meshRef.current.material.uniforms.uChromaticAbberation.value =
-      chromaticAbberation
+    meshRef.current.material.uniforms.uValue.value = value
 
     // FBO
     // state.gl.setRenderTarget(buffer)
@@ -208,37 +155,9 @@ export default function Shader() {
         type: "samplerCube",
         value: cubeTexture,
       },
-      uSpeed: {
+      uValue: {
         type: "f",
-        value: speed,
-      },
-      uIOR: {
-        type: "f",
-        value: IOR,
-      },
-      uCount: {
-        type: "i",
-        value: count,
-      },
-      uReflection: {
-        type: "f",
-        value: reflection,
-      },
-      uSize: {
-        type: "f",
-        value: size,
-      },
-      uDispersion: {
-        type: "f",
-        value: dispersion,
-      },
-      uRefractPower: {
-        type: "f",
-        value: refract,
-      },
-      uChromaticAbberation: {
-        type: "f",
-        value: chromaticAbberation,
+        value: value,
       },
     }),
     [viewport.width, viewport.height, buffer.texture]
@@ -246,6 +165,7 @@ export default function Shader() {
 
   return (
     <>
+      <Leva hidden />
       <OrbitControls />
 
       <mesh position={[0, 0.5, -4]} rotation={[2, 4, 1]}>
