@@ -2,7 +2,6 @@ import {
   useCubeTexture,
   useTexture,
   useFBO,
-  Image,
   OrbitControls,
 } from "@react-three/drei"
 import { useFrame, useThree } from "@react-three/fiber"
@@ -57,15 +56,6 @@ export default function Shader() {
     },
   })
 
-  // const reflection = 1.5
-  // const speed = 0.5
-  // const IOR = 0.84
-  // const count = 3
-  // const size = 1.0
-  // const dispersion = 0.03
-  // const refract = 0.15
-  // const chromaticAbberation = 0.5
-
   useEffect(() => {
     const object = meshRef.current
 
@@ -103,7 +93,6 @@ export default function Shader() {
     // Update the uniform
 
     meshRef.current.material.uniforms.uCamPos.value = camera.position
-    // meshRef.current.material.uniforms.uMouse.value = new Vector2(0, 0)
 
     meshRef.current.material.uniforms.uMouse.value = new Vector2(
       mousePosition.current.x,
@@ -112,12 +101,6 @@ export default function Shader() {
 
     meshRef.current.material.uniforms.uTime.value = time * speed
     meshRef.current.material.uniforms.uValue.value = value
-
-    // FBO
-    // state.gl.setRenderTarget(buffer)
-    // state.gl.setClearColor("#d8d7d7")
-    // state.gl.render(scene, state.camera)
-    // state.gl.setRenderTarget(null)
   })
 
   // Define the shader uniforms with memoization to optimize performance
